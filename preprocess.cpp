@@ -19,6 +19,26 @@ map<string,map<int,int> >myDic;
 */
 set<string>stopDic;	//Í£ÓÃ´Ê´Êµä
 
+ofstream badWordsFile("E:\\final\\final\\myData\\badwords.txt");
+map<string,int> badWords;
+
+int isNotChinese(string str)
+{
+	int codeHigh = 0x9fa0;
+	int codeLow = 0x4e00;//unicodeÖÐºº×ÖµÄ·¶Î§
+	int iWLen=MultiByteToWideChar( CP_ACP, 0, str.c_str(), str.size(), 0, 0 );// ¼ÆËã×ª»»ºó¿í×Ö·û´®µÄ³¤¶È¡££¨²»°üº¬×Ö·û´®½áÊø·û£©
+    wchar_t *wstr= new wchar_t [iWLen+1];
+    MultiByteToWideChar( CP_ACP, 0, str.c_str(), str.size(), wstr, iWLen ); // ÕýÊ½×ª»»¡£
+    wstr[iWLen] = L'\0'; 
+	for(int i = 0; i < iWLen;i++)
+	{
+            if(wstr[i] < codeLow || wstr[i] > codeHigh)
+			{
+				return 0;//×Ö·û´®ÖÐº¬ÓÐ·Çºº×Ö·ûºÅ
+			}
+	}
+	return 1;
+}
 void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾¶
 {
 
@@ -63,36 +83,24 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 				sSentence[len] = '\0';
 				unsigned int nPaLen=strlen(sSentence); // ÐèÒª·Ö´ÊµÄ³¤¶È
 				char* sRst=0;   //ÓÃ»§×ÔÐÐ·ÖÅä¿Õ¼ä£¬ÓÃÓÚ±£´æ½á¹û£»
-				//sRst=(char *)malloc(nPaLen*6); //½¨Òé³¤¶ÈÎª×Ö·û´®³¤¶ÈµÄ±¶¡£
-				//int nRstLen=0; //·Ö´Ê½á¹ûµÄ³¤¶È
+				sRst=(char *)malloc(nPaLen*6); //½¨Òé³¤¶ÈÎª×Ö·û´®³¤¶ÈµÄ±¶¡£
+				int nRstLen=0; //·Ö´Ê½á¹ûµÄ³¤¶È
 			
-				//nRstLen = ICTCLAS_ParagraphProcess(sSentence,nPaLen,sRst,CODE_TYPE_UNKNOWN,0);  //×Ö·û´®´¦Àí
+				nRstLen = ICTCLAS_ParagraphProcess(sSentence,nPaLen,sRst,CODE_TYPE_UNKNOWN,0);  //×Ö·û´®´¦Àí
 				/*ÊÕ¼¯µ¥´Ê£¬ÐÎ³É×Öµä*/
-				 int rstCount=0;
-
-				LPICTCLAS_RESULT rstVec=ICTCLAS_ParagraphProcessA(sSentence,nPaLen,rstCount,CODE_TYPE_UNKNOWN,g_bPOSTagged);
-				printf("******%d\n",rstCount);											//×Ö·û´®´¦Àí
-				string str = sSentence;
-				string words;
-				set<string> txtDic;
-				for (int i=0;i< rstCount;i++)
-				{//´òÓ¡·Ö´Ê½á¹û
-					words = str.substr(rstVec[i].iStartPos,rstVec[i].iLength);
-					if(!txtDic.count(words) && !stopDic.count(words))
-					{
-						++myDic[words][9];
-						++myDic[words][folderId];
-						txtDic.insert(words);
-					}
-					printf("start=%d,length=%d type = %s %d\r\n",rstVec[i].iStartPos,rstVec[i].iLength,rstVec[i].szPOS,rstVec[i].iPOS);
-				}
+			
 			
 				//cout<<"Ä¿Â¼Îª£º"<<folderId<<endl;
-				/*string words;
+				string words;
 				istringstream istream(sRst);
 				set<string> txtDic; //±íÊ¾Ò»ÆªÎÄÕÂµÄ´Êµä,ÎªÁËÍ³¼Æ´ÊµÄÎÄµµÆµÂÊDF
 				while(istream>>words)
 				{
+					if(!isNotChinese(words))
+					{
+						badWords[words]++;
+						continue;
+					}
 
 					if((!txtDic.count(words)) && (!stopDic.count(words)))
 					{
@@ -100,10 +108,34 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 						++myDic[words][folderId];
 						txtDic.insert(words);
 					}
-				}*/
+				}
+				free(sRst);
 				txtDic.clear();
-				ICTCLAS_ResultFree(rstVec);	//µ÷ÓÃ½Ó¿ÚÊÍ·ÅÄÚ´æ
-				//free(sRst);
+
+				/*int rstCount=0;
+
+				LPICTCLAS_RESULT rstVec=ICTCLAS_ParagraphProcessA(sSentence,nPaLen,rstCount,CODE_TYPE_UNKNOWN,g_bPOSTagged);
+														//×Ö·û´®´¦Àí
+				string str = sSentence;
+				string words;
+				set<string> txtDic;
+				for (int i=0;i< rstCount;i++)
+				{//´òÓ¡·Ö´Ê½á¹û
+					words = str.substr(rstVec[i].iStartPos,rstVec[i].iLength);
+					if(rstVec[i].iPOS == 93 || rstVec[i].iPOS == 18 || rstVec[i].iPOS == 52) //·ÇÓïËØ(Ó¢ÎÄµÈ)ºÍÊý´ÊºÍÄêÔÂ
+					{
+						badWords<<words<<" "<<rstVec[i].iPOS<<endl;
+					}
+					if(!txtDic.count(words) && !stopDic.count(words))
+					{
+						++myDic[words][9];
+						++myDic[words][folderId];
+						txtDic.insert(words);
+					}
+					
+				}
+				ICTCLAS_ResultFree(rstVec);	//µ÷ÓÃ½Ó¿ÚÊÍ·ÅÄÚ´æ*/
+				
 			}
 	
     }while (_findnext(Handle, &FileInfo) == 0);
@@ -151,8 +183,12 @@ int myParagraphProcess(string folderPath)
 		ofile<<endl;
 	}
 	printf("\n¹²³öÏÖ´Ê£º%d\n",dic_num);
+	for(map<string,int>::iterator itor = badWords.begin(); itor != badWords.end(); itor++)
+		badWordsFile<<itor->first<<endl;
+
 
 	myDic.clear(); //ÒÑ¾­±£´æÔÚÓ²ÅÌÁË£¬¿ÉÒÔÇå¿ÕÁË°É£¿
+	badWords.clear();
 	stopDicFile.close();
 	ofile.close();
 	return 1;

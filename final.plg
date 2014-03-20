@@ -6,37 +6,22 @@
 --------------------Configuration: final - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP7E0C.tmp" with contents
+Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSPF88D.tmp" with contents
 [
-/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/final.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/final.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "E:\final\final\classifier.cpp"
-"E:\final\final\feature.cpp"
-"E:\final\final\main.cpp"
-"E:\final\final\vsm.cpp"
 ]
-Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP7E0C.tmp" 
-Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP7E0D.tmp" with contents
-[
-kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/final.pdb" /debug /machine:I386 /out:"Debug/final.exe" /pdbtype:sept 
-.\Debug\classifier.obj
-.\Debug\feature.obj
-.\Debug\main.obj
-.\Debug\preprocess.obj
-.\Debug\vsm.obj
-]
-Creating command line "link.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP7E0D.tmp"
+Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSPF88D.tmp" 
 <h3>Output Window</h3>
 Compiling...
 classifier.cpp
-feature.cpp
-main.cpp
-vsm.cpp
-Linking...
+e:\final\final\classifier.cpp(123) : error C2059: syntax error : '<<'
+Error executing cl.exe.
 
 
 
 <h3>Results</h3>
-final.exe - 0 error(s), 0 warning(s)
+classifier.obj - 1 error(s), 0 warning(s)
 </pre>
 </body>
 </html>

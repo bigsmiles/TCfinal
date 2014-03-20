@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <io.h>
+#include <windows.h>
 #include <fcntl.h>
 #include <vector>
 #include <map>
@@ -24,11 +25,12 @@ using namespace std;
 //这个两个主要完成对文本的分词，然后形成字典myDic.txt;
 int myParagraphProcess(string folderPath);
 void testICTCLAS_ParagraphProcess(string folderPath,int folderId);
+int isNotChinese(string str);//是否包含非汉字
 
 void chiFeatureSelect();//卡方检验特征选取
 
 //文本向量化
-int myParagraphProcessToVSM(string folderPath);
+int myParagraphProcessToVSM(string folderPath,string desPath);
 void testICTCLAS_ParagraphProcessToVSM(string folderPath,int folderId);
 
 //分类算法

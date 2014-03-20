@@ -10,8 +10,7 @@ map<string,int>IDFDic; //只提取字典中IDF(即最后那对值)的字典
 set<string> featureDic;//特征词词词典,没有特征词的权值，区别于myFeatureDic
 map<string,vector<double> > txtVSM;
 double total = 3903;
-string VSMPath = "E:\\final\\final\\myData\\VSM.txt";
-string VSMtestPath = "E:\\final\\final\\myData\\VSMtest.txt";
+
 
 void testICTCLAS_ParagraphProcessToSVM(string folderPath,int folderId)  //path开始路径
 {
@@ -103,7 +102,7 @@ void testICTCLAS_ParagraphProcessToSVM(string folderPath,int folderId)  //path开
 	return ;  
 }
 
-int myParagraphProcessToVSM(string folderPath)
+int myParagraphProcessToVSM(string folderPath,string desPath)
 {
 	if(!ICTCLAS_Init()) //初始化分词组件。
 	{
@@ -145,7 +144,7 @@ int myParagraphProcessToVSM(string folderPath)
     testICTCLAS_ParagraphProcessToSVM(folderPath,0);//分词用例
 	
 	ICTCLAS_Exit();	//释放资源退出
-	ofstream outFile(VSMPath.c_str());
+	ofstream outFile(desPath.c_str());
 	//ofstream outFile(VSMtestPath.c_str());
 	for(map<string,vector<double> > ::iterator txtItor = txtVSM.begin(); txtItor != txtVSM.end(); txtItor++)
 	{

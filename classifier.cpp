@@ -118,6 +118,7 @@ void KNN()
         knn.clear();
        //break;
     }
+	int test[8] = {362,391,413,402,399,400,401,349};
     for( i = 0; i <= 8; i++)// 413 349 362 391 402 399 400 401
-    cout<<"属于该类别文章数："<<artNum[i]<<endl;
+    cout<<"属于该类别文章数："<<artNum[i]<<"正确率："<<artNum[i]/test[i]<<endl;
 }
