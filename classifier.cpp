@@ -4,12 +4,15 @@ typedef std::map<string, vector<double> > STRING2VECTOR;
 #define LEN 1000  //向量长度
 #define M 100   //KNN的中比较前K个
 #define TRAINLEN 3903
+#define TESTLEN 3117
 #define TEST
 double y[LEN],x;
 vector<double> tmpX;
 vector<pair<int,double> > knn;
 int myKNN[8];
-int artNum[9];
+
+int artNum[8];//正确分到类别ci的文本数
+int P[8];//表示不属于类别ci却被分到类别ci的文本数
 double trainSet[TRAINLEN+2][1000];
 bool cmp(const pair<int,double> & m1, const pair<int,double> & m2) 
 {
@@ -97,6 +100,7 @@ void KNN()
         }
         //cout<<endl;
 		//排序之后是：太空 计算机 艺术 环境 农业 经济 体育 历史
+		/*
         if(b >= 0 && b < 362 && flag == 0)
              artNum[0]++;
         else if (b >= 362 && b < 753 && flag == 1)
@@ -115,10 +119,65 @@ void KNN()
              artNum[7]++;
         else
             artNum[8]++;
+		*/
+		switch(flag)
+		{
+		case 0:
+			if(b >= 0 && b < 362)artNum[0]++;
+			else P[0]++;
+			break;
+		case 1:
+			if(b >= 362 && b < 753)artNum[1]++;
+			else P[1]++;
+			break;
+		case 2:
+			if(b >= 753 && b < 1166)artNum[2]++;
+			else P[2]++;
+			break;
+		case 3:
+			if(b >= 1166 && b < 1568)artNum[3]++;
+			else P[3]++;
+			break;
+		case 4:
+			if(b >= 1568 && b < 1967)artNum[4]++;
+			else P[4]++;
+			break;
+		case 5:
+			if(b >= 1967 && b < 2367)artNum[5]++;
+			else P[5]++;
+			break;
+		case 6:
+			if(b >= 2367 && b < 2768)artNum[6]++;
+			else P[6]++;
+			break;
+		case 7:
+			if(b >= 2768 && b < 3117)artNum[7]++;
+			else P[7]++;
+			break;
+		}
         knn.clear();
        //break;
     }
+	//int test[8] = {362,391,413,402,399,400,401,349};
+    //for( i = 0; i < 8; i++)// 413 349 362 391 402 399 400 401
+    //cout<<"属于该类别文章数："<<artNum[i]<<"召回率："<<1.0*artNum[i]/test[i]<<"正确率： "<<1.0*artNum[i]/(artNum[i]+P[i])<<endl;
+}
+void evaluateResult(int artNum[],int P[],int n)
+{
 	int test[8] = {362,391,413,402,399,400,401,349};
-    for( i = 0; i <= 8; i++)// 413 349 362 391 402 399 400 401
-    cout<<"属于该类别文章数："<<artNum[i]<<"正确率："<<artNum[i]/test[i]<<endl;
+	//宏平均
+	double MacroR,MacroP;
+	double MacroA = 0,MacroB = 0;
+	double MacroF1;
+	for(int i = 0; i < n; i++)
+	{
+		MacroA += artNum[i];
+		MacroB += P[i];
+		cout<<"类别"<<i<<"："<<artNum[i]<<"召回率："<<1.0*artNum[i]/test[i]<<"正确率： "<<1.0*artNum[i]/(artNum[i]+P[i])<<endl;
+	}
+	MacroR = MacroA/8;//召回率
+	MacroP = MacroB/8;//准确率
+	MacroF1 = (2 * MacroR * MacroP) / (MacroR + MacroP);
+	cout<<"宏平均评估："<<MacroF1<<endl;
+
 }

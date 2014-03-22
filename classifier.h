@@ -36,5 +36,8 @@ void testICTCLAS_ParagraphProcessToVSM(string folderPath,int folderId);
 //分类算法
 void KNN();
 
+//评价分类
+void evaluateResult(int artNum[],int P[],int n);
+
 
 #endif

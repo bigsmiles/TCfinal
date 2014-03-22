@@ -110,32 +110,7 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 					}
 				}
 				free(sRst);
-				txtDic.clear();
-
-				/*int rstCount=0;
-
-				LPICTCLAS_RESULT rstVec=ICTCLAS_ParagraphProcessA(sSentence,nPaLen,rstCount,CODE_TYPE_UNKNOWN,g_bPOSTagged);
-														//×Ö·û´®´¦Àí
-				string str = sSentence;
-				string words;
-				set<string> txtDic;
-				for (int i=0;i< rstCount;i++)
-				{//´òÓ¡·Ö´Ê½á¹û
-					words = str.substr(rstVec[i].iStartPos,rstVec[i].iLength);
-					if(rstVec[i].iPOS == 93 || rstVec[i].iPOS == 18 || rstVec[i].iPOS == 52) //·ÇÓïËØ(Ó¢ÎÄµÈ)ºÍÊý´ÊºÍÄêÔÂ
-					{
-						badWords<<words<<" "<<rstVec[i].iPOS<<endl;
-					}
-					if(!txtDic.count(words) && !stopDic.count(words))
-					{
-						++myDic[words][9];
-						++myDic[words][folderId];
-						txtDic.insert(words);
-					}
-					
-				}
-				ICTCLAS_ResultFree(rstVec);	//µ÷ÓÃ½Ó¿ÚÊÍ·ÅÄÚ´æ*/
-				
+				txtDic.clear();		
 			}
 	
     }while (_findnext(Handle, &FileInfo) == 0);
@@ -182,7 +157,7 @@ int myParagraphProcess(string folderPath)
 		}
 		ofile<<endl;
 	}
-	printf("\n¹²³öÏÖ´Ê£º%d\n",dic_num);
+	printf("\nÈ¥³ý·Çºº×Ö´Êºó¹²£º%d\n",dic_num);
 	for(map<string,int>::iterator itor = badWords.begin(); itor != badWords.end(); itor++)
 		badWordsFile<<itor->first<<endl;
 

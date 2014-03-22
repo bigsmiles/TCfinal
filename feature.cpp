@@ -2,13 +2,15 @@
 
 #define Cate 8  //总共有8个类别
 
+#define FEATURELEN 1000
+
 extern string myDicPath;
 extern map<string,map<int,int> > myDic;
 string featureDicPath = "E:\\final\\final\\myData\\featureDic.txt";
 vector<pair<string,double> > myFeature;
 
-//map<string,map<int,int> >::iterator dicItor;
-//map<int,int>::iterator iItor;
+double num[9] = {0,516,447,471,492,491,488,500,498};
+double num_D = 3903;
 
 bool cmp(const pair<string,double> & m1, const pair<string,double> & m2) 
 {
@@ -23,8 +25,7 @@ void chiFeatureSelect()
     string str;
     int id,df;
     int len;
-    double num[9] = {0,516,447,471,492,491,488,500,498};
-    double num_D = 3903;
+   
     double A,B,C,D;
     double n[10],n_9;
 	int i ;
@@ -59,7 +60,7 @@ void chiFeatureSelect()
     }
     stable_sort(myFeature.begin(),myFeature.end(),cmp);
 
-    for(vector<pair<string,double> >::size_type j=0;j < 1000;j++)
+    for(vector<pair<string,double> >::size_type j=0;j < FEATURELEN;j++)
     {
         ofile<<myFeature[j].first<<" "<<myFeature[j].second<<endl;
     }
