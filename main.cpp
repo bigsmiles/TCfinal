@@ -15,6 +15,8 @@ string textDataPath2 = "E:\\finalData\\2_answer";
 string VSMDesPath = "E:\\final\\final\\myData\\VSM.txt";
 string VSMtestDesPath = "E:\\final\\final\\myData\\VSMtest.txt";
 
+string VSMDesPathMatrix = "E:\\final\\final\\myData\\VSMMatrix.txt";
+string VSMtestDesPathMatrix = "E:\\final\\final\\myData\\VSMtestMatrix.txt";
 extern int artNum[8];
 extern int P[8];
 int main()
@@ -29,6 +31,9 @@ int main()
 	//chiFeatureSelect();
 	// myParagraphProcessToVSM(textDataPath,VSMDesPath);
 	 //myParagraphProcessToVSM(textDataPath2,VSMtestDesPath);
+
+	//myParagraphProcessToVSM(textDataPath,VSMDesPathMatrix);
+	//myParagraphProcessToVSM(textDataPath2,VSMtestDesPathMatrix);
 
 	 KNN();
 	 evaluateResult(artNum,P,8);

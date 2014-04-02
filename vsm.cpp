@@ -1,14 +1,14 @@
 #include "classifier.h"
 
 
-typedef std::map<string, vector<double> > STRING2VECTOR;
+typedef std::map<string, vector<pair<int,double> > > STRING2VECTOR;
 
 extern string myDicPath;
 extern string featureDicPath;
 
 map<string,int>IDFDic; //只提取字典中IDF(即最后那对值)的字典
 set<string> featureDic;//特征词词词典,没有特征词的权值，区别于myFeatureDic
-map<string,vector<double> > txtVSM;
+map<string,vector<pair<int,double> > > txtVSM;
 double total = 3903;
 
 
@@ -63,11 +63,12 @@ void testICTCLAS_ParagraphProcessToSVM(string folderPath,int folderId)  //path开
 				nRstLen = ICTCLAS_ParagraphProcess(sSentence,nPaLen,sRst,CODE_TYPE_UNKNOWN,0);  //字符串处理
 				/*收集单词，形成字典*/
 				double TF;
+				int id;
 				//int txtCnt;//文章总词数
 				string words;
 				istringstream istream(sRst);
 				map<string,int>txt;
-				vector<double> tmpVSM;
+				vector<pair<int,double> > tmpVSM;
 				set<string> txtWords;
 				while(istream>>words)
 				{
@@ -78,12 +79,17 @@ void testICTCLAS_ParagraphProcessToSVM(string folderPath,int folderId)  //path开
 					}
 				}
 				//outFile<<FileInfo.name<<endl;
+				id = 0;
 				for(set<string>::iterator setItor = featureDic.begin(); setItor != featureDic.end(); setItor++)
 				{
 				
 					TF = (1.0*txt[(*setItor)]) / txtWords.size();
 					TF *= log(0.01 + total/IDFDic[(*setItor)]);
-					tmpVSM.push_back(TF);
+					if(TF != 0)
+					{
+						tmpVSM.push_back(make_pair(id,TF));
+					}
+					id++;
 					//outFile<<TF<<" ";
 				
 				}
@@ -146,7 +152,7 @@ int myParagraphProcessToVSM(string folderPath,string desPath)
 	ICTCLAS_Exit();	//释放资源退出
 	ofstream outFile(desPath.c_str());
 	//ofstream outFile(VSMtestPath.c_str());
-	for(map<string,vector<double> > ::iterator txtItor = txtVSM.begin(); txtItor != txtVSM.end(); txtItor++)
+	/*for(map<string,vector<double> > ::iterator txtItor = txtVSM.begin(); txtItor != txtVSM.end(); txtItor++)
 	{
 
 		outFile<<txtItor->first<<endl;
@@ -156,6 +162,31 @@ int myParagraphProcessToVSM(string folderPath,string desPath)
 		}
 		outFile<<endl;
 	}
+	*/
+	/*for(map<string,vector<double> >::iterator txtItor = txtVSM.begin(); txtItor != txtVSM.end(); txtItor++)
+	{
+		outFile<<txtItor->first<<endl;
+		outFile<<txtItor->second.size()<<" ";
+		for(i = 0; i < 1000; i++)
+		{
+			if(txtItor->second[i] != 0)
+			{
+				outFile<<i<<" "<<txtItor->second[i]<<" ";
+			}
+		}
+	}*/
+	for(map<string,vector<pair<int,double> > > ::iterator txtItor = txtVSM.begin(); txtItor != txtVSM.end(); txtItor++)
+	{
+
+		outFile<<txtItor->first<<endl;
+		outFile<<txtItor->second.size()<<" ";
+		for(i = 0; i < txtItor->second.size(); i++)
+		{
+			outFile<<txtItor->second[i].first<<" "<<txtItor->second[i].second<<" ";
+		}
+		outFile<<endl;
+	}
+
 	outFile.close();
 	txtVSM.clear();
 	IDFDic.clear();
