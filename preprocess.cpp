@@ -6,23 +6,28 @@ bool g_bPOSTagged=true;
 #else
 bool g_bPOSTagged=false;
 #endif	
+
 string stopWordsPath = "E:\\final\\final\\myData\\stopwords.txt"; //¼ÇÂ¼Í£ÓÃ´Ê´ÊµäµÄÂ·¾¶
-string myDicPath = "E:\\final\\final\\myData\\myDic.txt"; //ÓïÁÏ¿â´ÊµäµÄÂ·¾¶
-string myTFDicPath = "E:\\final\\final\\myData\\myTFDic.txt";
+set<string>stopDic;	//Í£ÓÃ´Ê´Êµä
+//±£´æÒ»Ð©²»ºÃµÄ´Ê(±ÈÈç:²»ÊÇºº×ÖµÄ´ÊµÈ)
+ofstream badWordsFile("E:\\final\\final\\myData\\badwords.txt");
+map<string,int> badWords;
+
+//ÓïÁÏ¿â´ÊµäµÄÂ·¾¶,Í³¼ÆÎÄµµÆµÂÊDF
+//string myDicPath = "E:\\final\\final\\myData\\myDic.txt";
+//Ô¤ÁÏ´ÊµäµÄÂ·¾¶£¬Í³¼Æ´ÊÆµTF¡ª¡ª(ÓÃÓÚBayes)
+//string myTFDicPath = "E:\\final\\final\\myData\\myTFDic.txt";
+//DF´ÊµäºÍTF´Êµä
 map<string,map<int,int> >myDic;
 map<string,map<int,int> > myDicTF;
 /*
-´Êµä¸ñÊ½£ºÈç£¬¼ÆËã»ú
+´Êµä¸ñÊ½£ºÈç£¬¼ÆËã»ú¡ª¡ªTFDicÀàËÆ
 ¼ÆËã»ú
 0 3 1 3 4 5 9 8
 ±íÊ¾ÓÐÈý¸öÊý¶Ô,µÚ1Àà±ðÖÐ³öÏÖ"¼ÆËã»ú"µÄÎÄµµÆµÊý(DF)ÊÇ3
 µÚ4Àà±ðÖÐ³öÏÖ"¼ÆËã»ú"µÄDFÊÇ 5
 µÚ9Àà±ð¾ÍÊÇ "¼ÆËã»ú"ÔÚÓïÁÏ¿âµÄ×ÜDF
 */
-set<string>stopDic;	//Í£ÓÃ´Ê´Êµä
-
-ofstream badWordsFile("E:\\final\\final\\myData\\badwords.txt");
-map<string,int> badWords;
 
 int isNotChinese(string str)
 {
@@ -110,15 +115,15 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 						++myDicTF[words][folderId];
 					}
 
-					/*if((!txtDic.count(words)) && (!stopDic.count(words)))
+					if((!txtDic.count(words)) && (!stopDic.count(words)))
 					{
 						++myDic[words][9];
 						++myDic[words][folderId];
 						txtDic.insert(words);
-					}*/
+					}
 				}
 				free(sRst);
-				//txtDic.clear();		
+				txtDic.clear();		
 			}
 	
     }while (_findnext(Handle, &FileInfo) == 0);
@@ -127,7 +132,7 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 	return ;  
 }
 
-int myParagraphProcess(string folderPath)
+int myParagraphProcess(string folderPath,string myDicPath,string myTFDicPath)
 {
 	if(!ICTCLAS_Init()) //³õÊ¼»¯·Ö´Ê×é¼þ¡£
 	{
@@ -140,7 +145,8 @@ int myParagraphProcess(string folderPath)
 	}
 
 	ifstream stopDicFile(stopWordsPath.c_str());//E:\final\final\myData\stopwords.txt
-	//ofstream ofile(myDicPath.c_str());	//E:\final\final\myData\myDic.txt
+
+	ofstream ofile(myDicPath.c_str());	//E:\final\final\myData\myDic.txt
 	ofstream _ofile(myTFDicPath.c_str());//E:\\final\\final\\myData\\myTFDic.txt
 
 	string stopWord;
@@ -155,7 +161,7 @@ int myParagraphProcess(string folderPath)
 
 	int dic_num = 0;
 	int flag = 0;  //µÚ0¶Ô,±íÊ¾Êý×éµÄ´óÐ¡
-	/*for(map<string,map<int,int> >::iterator mapItor = myDic.begin(); mapItor != myDic.end(); mapItor++)
+	for(map<string,map<int,int> >::iterator mapItor = myDic.begin(); mapItor != myDic.end(); mapItor++)
 	{
 		ofile<<mapItor->first<<endl;
 		ofile<<flag<<" "<<mapItor->second.size();
@@ -165,7 +171,7 @@ int myParagraphProcess(string folderPath)
 			ofile<<" "<<itor->first<<" "<<itor->second;
 		}
 		ofile<<endl;
-	}*/
+	}
 	for(map<string,map<int,int> >::iterator tfItor = myDicTF.begin();tfItor != myDicTF.end();tfItor++)
 	{
 		_ofile<<tfItor->first<<endl;
@@ -182,12 +188,12 @@ int myParagraphProcess(string folderPath)
 		badWordsFile<<itor->first<<endl;
 
 
-	//myDic.clear(); //ÒÑ¾­±£´æÔÚÓ²ÅÌÁË£¬¿ÉÒÔÇå¿ÕÁË°É£¿
+	myDic.clear(); //ÒÑ¾­±£´æÔÚÓ²ÅÌÁË£¬¿ÉÒÔÇå¿ÕÁË°É£¿
 	myDicTF.clear();
 	badWords.clear();
 
 	stopDicFile.close();
-	//ofile.close();
+	ofile.close();
 	_ofile.close();
 	return 1;
 }

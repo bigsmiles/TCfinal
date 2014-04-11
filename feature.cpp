@@ -5,11 +5,10 @@
 #define FEATURELEN 1000
 
 extern string myDicPath;
+
 extern map<string,map<int,int> > myDic;
 
 extern string featureDicPath;
-
-
 
 vector<pair<string,double> > myFeature;
 
@@ -22,9 +21,9 @@ bool cmp(const pair<string,double> & m1, const pair<string,double> & m2)
 }
 
 
-void chiFeatureSelect()
+void chiFeatureSelect(string dicPath)
 {
-	ifstream ifile (myDicPath.c_str());
+	ifstream ifile (dicPath.c_str());
     ofstream ofile (featureDicPath.c_str());
     string str;
     int id,df;
@@ -71,9 +70,10 @@ void chiFeatureSelect()
 	myFeature.clear();
 	myDic.clear();
 }
-void expectedCrossEntrophyFeatureSelect()
+
+void expectedCrossEntrophyFeatureSelect(string dicPath)
 {
-	ifstream iFile (myDicPath.c_str());
+	ifstream iFile (dicPath.c_str());
     ofstream oFile (featureDicPath.c_str());
 	string words;
 	int flag,len;

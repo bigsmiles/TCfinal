@@ -25,7 +25,6 @@ double y[LEN];
 double bayes[1000][8];
 string trainBayes = "E:\\final\\final\\myData\\myTFDic.txt";
 
-string testBayes = "E:\\final\\final\\myData\\testBayesMatrix.txt";
 extern string featureDicPath;
 map<string,int> featureDic;
 map<string,map<int,int> >bayesDic;
@@ -38,7 +37,7 @@ bool cmp(const pair<int,double> & m1, const pair<int,double> & m2)
 516 447 471 492 491 488 500 498
 */
 
-void KNN()
+void KNN(string trainFilePath,string testFilePath)
 {
 	//ifstream iFile1("E:\\final\\final\\myData\\VSM.txt");
     //ifstream iFile2("E:\\final\\final\\myData\\VSMtest.txt");
@@ -46,8 +45,10 @@ void KNN()
 	//ifstream iFile1("E:\\final\\final\\myData\\VSMMatrix.txt");
     //ifstream iFile2("E:\\final\\final\\myData\\VSMtestMatrix.txt");
 
-	ifstream iFile1("E:\\final\\final\\myData\\VSMMatrixOnCross.txt");
-    ifstream iFile2("E:\\final\\final\\myData\\VSMtestMatrixOnCross.txt");
+	//ifstream iFile1("E:\\final\\final\\myData\\VSMMatrixOnCross.txt");
+    //ifstream iFile2("E:\\final\\final\\myData\\VSMtestMatrixOnCross.txt");
+	ifstream iFile1(trainFilePath.c_str());
+	ifstream iFile2(testFilePath.c_str());
 
     string trainTerm,testTerm;
     map<string,double> result;
@@ -232,9 +233,9 @@ void KNN()
     }
 }
 
-void naiveBayes()
+void naiveBayes(string naiveBayesTestVSM)
 {
-	ifstream iFile(trainBayes.c_str());
+	ifstream iFile(trainBayes.c_str()); //TF´Êµä
 	ifstream featureFile(featureDicPath.c_str());
 	cout<<featureDicPath<<endl;
 	double featureVal;
@@ -282,7 +283,8 @@ void naiveBayes()
 	double p[8];
 	int c,pos,v,b;
 	string kk;
-	ifstream in("testBayesOnCross.txt");
+	//ifstream in("testBayesOnCross.txt");
+	ifstream in(naiveBayesTestVSM.c_str());
 	//ofstream myout("ans.txt");
 	int result[3117 + 3];
 	int reCnt = 0;
