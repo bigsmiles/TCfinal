@@ -28,13 +28,18 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId);
 int isNotChinese(string str);//是否包含非汉字
 
 void chiFeatureSelect();//卡方检验特征选取
+void expectedCrossEntrophyFeatureSelect();//期望交叉熵
 
 //文本向量化
 int myParagraphProcessToVSM(string folderPath,string desPath);
 void testICTCLAS_ParagraphProcessToVSM(string folderPath,int folderId);
 
+int myTextToVSMforNaiveBayes(string folderPath,string desPath);
+void testICTCLAS_VSMforNaiveBayes(string folderPath,int folderId);
+
 //分类算法
 void KNN();
+void naiveBayes();
 
 //评价分类
 void evaluateResult(int artNum[],int P[],int n);

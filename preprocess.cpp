@@ -8,7 +8,9 @@ bool g_bPOSTagged=false;
 #endif	
 string stopWordsPath = "E:\\final\\final\\myData\\stopwords.txt"; //¼ÇÂ¼Í£ÓÃ´Ê´ÊµäµÄÂ·¾¶
 string myDicPath = "E:\\final\\final\\myData\\myDic.txt"; //ÓïÁÏ¿â´ÊµäµÄÂ·¾¶
-map<string,map<int,int> >myDic; 
+string myTFDicPath = "E:\\final\\final\\myData\\myTFDic.txt";
+map<string,map<int,int> >myDic;
+map<string,map<int,int> > myDicTF;
 /*
 ´Êµä¸ñÊ½£ºÈç£¬¼ÆËã»ú
 ¼ÆËã»ú
@@ -101,16 +103,22 @@ void testICTCLAS_ParagraphProcess(string folderPath,int folderId)  //path¿ªÊ¼Â·¾
 						badWords[words]++;
 						continue;
 					}
+					
+					if(!stopDic.count(words))
+					{
+						++myDicTF[words][9];
+						++myDicTF[words][folderId];
+					}
 
-					if((!txtDic.count(words)) && (!stopDic.count(words)))
+					/*if((!txtDic.count(words)) && (!stopDic.count(words)))
 					{
 						++myDic[words][9];
 						++myDic[words][folderId];
 						txtDic.insert(words);
-					}
+					}*/
 				}
 				free(sRst);
-				txtDic.clear();		
+				//txtDic.clear();		
 			}
 	
     }while (_findnext(Handle, &FileInfo) == 0);
@@ -132,7 +140,8 @@ int myParagraphProcess(string folderPath)
 	}
 
 	ifstream stopDicFile(stopWordsPath.c_str());//E:\final\final\myData\stopwords.txt
-	ofstream ofile(myDicPath.c_str());	//E:\final\final\myData\myDic.txt
+	//ofstream ofile(myDicPath.c_str());	//E:\final\final\myData\myDic.txt
+	ofstream _ofile(myTFDicPath.c_str());//E:\\final\\final\\myData\\myTFDic.txt
 
 	string stopWord;
 	while(stopDicFile>>stopWord)
@@ -146,7 +155,7 @@ int myParagraphProcess(string folderPath)
 
 	int dic_num = 0;
 	int flag = 0;  //µÚ0¶Ô,±íÊ¾Êý×éµÄ´óÐ¡
-	for(map<string,map<int,int> >::iterator mapItor = myDic.begin(); mapItor != myDic.end(); mapItor++)
+	/*for(map<string,map<int,int> >::iterator mapItor = myDic.begin(); mapItor != myDic.end(); mapItor++)
 	{
 		ofile<<mapItor->first<<endl;
 		ofile<<flag<<" "<<mapItor->second.size();
@@ -156,15 +165,29 @@ int myParagraphProcess(string folderPath)
 			ofile<<" "<<itor->first<<" "<<itor->second;
 		}
 		ofile<<endl;
+	}*/
+	for(map<string,map<int,int> >::iterator tfItor = myDicTF.begin();tfItor != myDicTF.end();tfItor++)
+	{
+		_ofile<<tfItor->first<<endl;
+		_ofile<<flag<<" "<<tfItor->second.size();
+		//dic_num++;
+		for(map<int,int>::iterator itor = tfItor->second.begin(); itor != tfItor->second.end(); itor++)
+		{
+			_ofile<<" "<<itor->first<<" "<<itor->second;
+		}
+		_ofile<<endl;
 	}
 	printf("\nÈ¥³ý·Çºº×Ö´Êºó¹²£º%d\n",dic_num);
 	for(map<string,int>::iterator itor = badWords.begin(); itor != badWords.end(); itor++)
 		badWordsFile<<itor->first<<endl;
 
 
-	myDic.clear(); //ÒÑ¾­±£´æÔÚÓ²ÅÌÁË£¬¿ÉÒÔÇå¿ÕÁË°É£¿
+	//myDic.clear(); //ÒÑ¾­±£´æÔÚÓ²ÅÌÁË£¬¿ÉÒÔÇå¿ÕÁË°É£¿
+	myDicTF.clear();
 	badWords.clear();
+
 	stopDicFile.close();
-	ofile.close();
+	//ofile.close();
+	_ofile.close();
 	return 1;
 }
