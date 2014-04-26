@@ -235,7 +235,7 @@ void KNN(string trainFilePath,string testFilePath)
 
 void naiveBayes(string naiveBayesTestVSM)
 {
-	ifstream iFile(trainBayes.c_str()); //TF´Êµä
+	ifstream iFile(trainBayes.c_str()); //TF´Êµä"E:\\final\\final\\myData\\myTFDic.txt";
 	ifstream featureFile(featureDicPath.c_str());
 	cout<<featureDicPath<<endl;
 	double featureVal;
@@ -272,14 +272,14 @@ void naiveBayes(string naiveBayesTestVSM)
 		}
 		j++;
 	}
-	/*
-	ofstream out("tmp.txt");
+	
+	ofstream out("mydata\\bayesOnECE.txt");
 	for( i = 0; i < 8; i++)
 	{
 		for(j = 0 ; j < 1000; j++)
-				out<<" "<<bayes[i][j]<<" ";
+				out<<bayes[j][i]<<" ";
 		out<<endl;
-	}*/
+	}
 	double p[8];
 	int c,pos,v,b;
 	string kk;
@@ -299,6 +299,7 @@ void naiveBayes(string naiveBayesTestVSM)
 			for(j = 0; j < 8; j++)
 			{
 				p[j] += v * log(bayes[pos][j]);
+				//p[j] += v * log(bayes[j][pos]);
 			}
 		}
 	
